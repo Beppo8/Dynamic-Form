@@ -23,7 +23,7 @@ defmodule LiveViewStudioWeb.LicenseLive do
               </span>
             </div>
 
-            <form>
+            <form phx-change="update">
               <input type="range" min="1" max="10"
                     name="seats" value="<%= @seats %>" />
             </form>
@@ -36,6 +36,15 @@ defmodule LiveViewStudioWeb.LicenseLive do
         </div>
       </div>
     """
+  end
+
+  def handle_event("update", %{"seats" => seats}, socket) do
+    seats = String.to_integer(seats)
+    socket =
+      assign(socket,
+      seats: seats,
+      amount: Licenses.calculate(seats))
+    {:noreply, socket}
   end
 
 end
